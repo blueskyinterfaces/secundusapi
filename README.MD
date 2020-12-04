@@ -38,7 +38,7 @@ Most of these can easily be replaced with your own choices since their usage is 
 
 Using secundusapi requires having Go 1.7 or above. Once you downloaded secundusapi (either using Git or go get) you need to configure the following:
 
-1. To use secundusapi as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/` to `$GOPATH/github.com/blueskyinterfaces/secundusapiapi`. Replace all: gorsk -> secundus, ribice -> blueskyinterfaces
+1. To use secundusapi as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/` to `$GOPATH/github.com/blueskyinterfaces/secundusapi`. Replace all: gorsk -> secundus, ribice -> blueskyinterfaces
 
 2. Change the configuration file according to your needs, or create a new one.
 
