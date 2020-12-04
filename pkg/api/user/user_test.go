@@ -6,10 +6,10 @@ import (
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/user"
-	"github.com/secundusteam/secundus/pkg/utl/mock"
-	"github.com/secundusteam/secundus/pkg/utl/mock/mockdb"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/user"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock/mockdb"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -17,24 +17,24 @@ import (
 func TestCreate(t *testing.T) {
 	type args struct {
 		c   echo.Context
-		req secundus.User
+		req secundusapi.User
 	}
 	cases := []struct {
 		name     string
 		args     args
 		wantErr  bool
-		wantData secundus.User
+		wantData secundusapi.User
 		udb      *mockdb.User
 		rbac     *mock.RBAC
 		sec      *mock.Secure
 	}{{
 		name: "Fail on is lower role",
 		rbac: &mock.RBAC{
-			AccountCreateFn: func(echo.Context, secundus.AccessRole, int, int) error {
-				return secundus.ErrGeneric
+			AccountCreateFn: func(echo.Context, secundusapi.AccessRole, int, int) error {
+				return secundusapi.ErrGeneric
 			}},
 		wantErr: true,
-		args: args{req: secundus.User{
+		args: args{req: secundusapi.User{
 			FirstName: "John",
 			LastName:  "Doe",
 			Username:  "JohnDoe",
@@ -44,7 +44,7 @@ func TestCreate(t *testing.T) {
 	},
 		{
 			name: "Success",
-			args: args{req: secundus.User{
+			args: args{req: secundusapi.User{
 				FirstName: "John",
 				LastName:  "Doe",
 				Username:  "JohnDoe",
@@ -52,7 +52,7 @@ func TestCreate(t *testing.T) {
 				Password:  "Thranduil8822",
 			}},
 			udb: &mockdb.User{
-				CreateFn: func(db orm.DB, u secundus.User) (secundus.User, error) {
+				CreateFn: func(db orm.DB, u secundusapi.User) (secundusapi.User, error) {
 					u.CreatedAt = mock.TestTime(2000)
 					u.UpdatedAt = mock.TestTime(2000)
 					u.Base.ID = 1
@@ -60,7 +60,7 @@ func TestCreate(t *testing.T) {
 				},
 			},
 			rbac: &mock.RBAC{
-				AccountCreateFn: func(echo.Context, secundus.AccessRole, int, int) error {
+				AccountCreateFn: func(echo.Context, secundusapi.AccessRole, int, int) error {
 					return nil
 				}},
 			sec: &mock.Secure{
@@ -68,8 +68,8 @@ func TestCreate(t *testing.T) {
 					return "h4$h3d"
 				},
 			},
-			wantData: secundus.User{
-				Base: secundus.Base{
+			wantData: secundusapi.User{
+				Base: secundusapi.Base{
 					ID:        1,
 					CreatedAt: mock.TestTime(2000),
 					UpdatedAt: mock.TestTime(2000),
@@ -98,7 +98,7 @@ func TestView(t *testing.T) {
 	cases := []struct {
 		name     string
 		args     args
-		wantData secundus.User
+		wantData secundusapi.User
 		wantErr  error
 		udb      *mockdb.User
 		rbac     *mock.RBAC
@@ -108,15 +108,15 @@ func TestView(t *testing.T) {
 			args: args{id: 5},
 			rbac: &mock.RBAC{
 				EnforceUserFn: func(c echo.Context, id int) error {
-					return secundus.ErrGeneric
+					return secundusapi.ErrGeneric
 				}},
-			wantErr: secundus.ErrGeneric,
+			wantErr: secundusapi.ErrGeneric,
 		},
 		{
 			name: "Success",
 			args: args{id: 1},
-			wantData: secundus.User{
-				Base: secundus.Base{
+			wantData: secundusapi.User{
+				Base: secundusapi.Base{
 					ID:        1,
 					CreatedAt: mock.TestTime(2000),
 					UpdatedAt: mock.TestTime(2000),
@@ -130,10 +130,10 @@ func TestView(t *testing.T) {
 					return nil
 				}},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
 					if id == 1 {
-						return secundus.User{
-							Base: secundus.Base{
+						return secundusapi.User{
+							Base: secundusapi.Base{
 								ID:        1,
 								CreatedAt: mock.TestTime(2000),
 								UpdatedAt: mock.TestTime(2000),
@@ -143,7 +143,7 @@ func TestView(t *testing.T) {
 							Username:  "JohnDoe",
 						}, nil
 					}
-					return secundus.User{}, nil
+					return secundusapi.User{}, nil
 				}},
 		},
 	}
@@ -160,52 +160,52 @@ func TestView(t *testing.T) {
 func TestList(t *testing.T) {
 	type args struct {
 		c   echo.Context
-		pgn secundus.Pagination
+		pgn secundusapi.Pagination
 	}
 	cases := []struct {
 		name     string
 		args     args
-		wantData []secundus.User
+		wantData []secundusapi.User
 		wantErr  bool
 		udb      *mockdb.User
 		rbac     *mock.RBAC
 	}{
 		{
 			name: "Fail on query List",
-			args: args{c: nil, pgn: secundus.Pagination{
+			args: args{c: nil, pgn: secundusapi.Pagination{
 				Limit:  100,
 				Offset: 200,
 			}},
 			wantErr: true,
 			rbac: &mock.RBAC{
-				UserFn: func(c echo.Context) secundus.AuthUser {
-					return secundus.AuthUser{
+				UserFn: func(c echo.Context) secundusapi.AuthUser {
+					return secundusapi.AuthUser{
 						ID:         1,
 						CompanyID:  2,
 						LocationID: 3,
-						Role:       secundus.UserRole,
+						Role:       secundusapi.UserRole,
 					}
 				}}},
 		{
 			name: "Success",
-			args: args{c: nil, pgn: secundus.Pagination{
+			args: args{c: nil, pgn: secundusapi.Pagination{
 				Limit:  100,
 				Offset: 200,
 			}},
 			rbac: &mock.RBAC{
-				UserFn: func(c echo.Context) secundus.AuthUser {
-					return secundus.AuthUser{
+				UserFn: func(c echo.Context) secundusapi.AuthUser {
+					return secundusapi.AuthUser{
 						ID:         1,
 						CompanyID:  2,
 						LocationID: 3,
-						Role:       secundus.AdminRole,
+						Role:       secundusapi.AdminRole,
 					}
 				}},
 			udb: &mockdb.User{
-				ListFn: func(orm.DB, *secundus.ListQuery, secundus.Pagination) ([]secundus.User, error) {
-					return []secundus.User{
+				ListFn: func(orm.DB, *secundusapi.ListQuery, secundusapi.Pagination) ([]secundusapi.User, error) {
+					return []secundusapi.User{
 						{
-							Base: secundus.Base{
+							Base: secundusapi.Base{
 								ID:        1,
 								CreatedAt: mock.TestTime(1999),
 								UpdatedAt: mock.TestTime(2000),
@@ -216,7 +216,7 @@ func TestList(t *testing.T) {
 							Username:  "johndoe",
 						},
 						{
-							Base: secundus.Base{
+							Base: secundusapi.Base{
 								ID:        2,
 								CreatedAt: mock.TestTime(2001),
 								UpdatedAt: mock.TestTime(2002),
@@ -228,9 +228,9 @@ func TestList(t *testing.T) {
 						},
 					}, nil
 				}},
-			wantData: []secundus.User{
+			wantData: []secundusapi.User{
 				{
-					Base: secundus.Base{
+					Base: secundusapi.Base{
 						ID:        1,
 						CreatedAt: mock.TestTime(1999),
 						UpdatedAt: mock.TestTime(2000),
@@ -241,7 +241,7 @@ func TestList(t *testing.T) {
 					Username:  "johndoe",
 				},
 				{
-					Base: secundus.Base{
+					Base: secundusapi.Base{
 						ID:        2,
 						CreatedAt: mock.TestTime(2001),
 						UpdatedAt: mock.TestTime(2002),
@@ -279,13 +279,13 @@ func TestDelete(t *testing.T) {
 		{
 			name:    "Fail on ViewUser",
 			args:    args{id: 1},
-			wantErr: secundus.ErrGeneric,
+			wantErr: secundusapi.ErrGeneric,
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
 					if id != 1 {
-						return secundus.User{}, nil
+						return secundusapi.User{}, nil
 					}
-					return secundus.User{}, secundus.ErrGeneric
+					return secundusapi.User{}, secundusapi.ErrGeneric
 				},
 			},
 		},
@@ -293,53 +293,53 @@ func TestDelete(t *testing.T) {
 			name: "Fail on RBAC",
 			args: args{id: 1},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
-						Base: secundus.Base{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
+						Base: secundusapi.Base{
 							ID:        id,
 							CreatedAt: mock.TestTime(1999),
 							UpdatedAt: mock.TestTime(2000),
 						},
 						FirstName: "John",
 						LastName:  "Doe",
-						Role: &secundus.Role{
-							AccessLevel: secundus.UserRole,
+						Role: &secundusapi.Role{
+							AccessLevel: secundusapi.UserRole,
 						},
 					}, nil
 				},
 			},
 			rbac: &mock.RBAC{
-				IsLowerRoleFn: func(echo.Context, secundus.AccessRole) error {
-					return secundus.ErrGeneric
+				IsLowerRoleFn: func(echo.Context, secundusapi.AccessRole) error {
+					return secundusapi.ErrGeneric
 				}},
-			wantErr: secundus.ErrGeneric,
+			wantErr: secundusapi.ErrGeneric,
 		},
 		{
 			name: "Success",
 			args: args{id: 1},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
-						Base: secundus.Base{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
+						Base: secundusapi.Base{
 							ID:        id,
 							CreatedAt: mock.TestTime(1999),
 							UpdatedAt: mock.TestTime(2000),
 						},
 						FirstName: "John",
 						LastName:  "Doe",
-						Role: &secundus.Role{
-							AccessLevel: secundus.AdminRole,
+						Role: &secundusapi.Role{
+							AccessLevel: secundusapi.AdminRole,
 							ID:          2,
 							Name:        "Admin",
 						},
 					}, nil
 				},
-				DeleteFn: func(db orm.DB, usr secundus.User) error {
+				DeleteFn: func(db orm.DB, usr secundusapi.User) error {
 					return nil
 				},
 			},
 			rbac: &mock.RBAC{
-				IsLowerRoleFn: func(echo.Context, secundus.AccessRole) error {
+				IsLowerRoleFn: func(echo.Context, secundusapi.AccessRole) error {
 					return nil
 				}},
 		},
@@ -363,7 +363,7 @@ func TestUpdate(t *testing.T) {
 	cases := []struct {
 		name     string
 		args     args
-		wantData secundus.User
+		wantData secundusapi.User
 		wantErr  error
 		udb      *mockdb.User
 		rbac     *mock.RBAC
@@ -375,9 +375,9 @@ func TestUpdate(t *testing.T) {
 			}},
 			rbac: &mock.RBAC{
 				EnforceUserFn: func(c echo.Context, id int) error {
-					return secundus.ErrGeneric
+					return secundusapi.ErrGeneric
 				}},
-			wantErr: secundus.ErrGeneric,
+			wantErr: secundusapi.ErrGeneric,
 		},
 		{
 			name: "Fail on Update",
@@ -388,11 +388,11 @@ func TestUpdate(t *testing.T) {
 				EnforceUserFn: func(c echo.Context, id int) error {
 					return nil
 				}},
-			wantErr: secundus.ErrGeneric,
+			wantErr: secundusapi.ErrGeneric,
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
-						Base: secundus.Base{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
+						Base: secundusapi.Base{
 							ID:        1,
 							CreatedAt: mock.TestTime(1990),
 							UpdatedAt: mock.TestTime(1991),
@@ -408,8 +408,8 @@ func TestUpdate(t *testing.T) {
 						Email:      "golang@go.org",
 					}, nil
 				},
-				UpdateFn: func(db orm.DB, usr secundus.User) error {
-					return secundus.ErrGeneric
+				UpdateFn: func(db orm.DB, usr secundusapi.User) error {
+					return secundusapi.ErrGeneric
 				},
 			},
 		},
@@ -426,8 +426,8 @@ func TestUpdate(t *testing.T) {
 				EnforceUserFn: func(c echo.Context, id int) error {
 					return nil
 				}},
-			wantData: secundus.User{
-				Base: secundus.Base{
+			wantData: secundusapi.User{
+				Base: secundusapi.Base{
 					ID:        1,
 					CreatedAt: mock.TestTime(1990),
 					UpdatedAt: mock.TestTime(2000),
@@ -443,9 +443,9 @@ func TestUpdate(t *testing.T) {
 				Email:      "golang@go.org",
 			},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
-						Base: secundus.Base{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
+						Base: secundusapi.Base{
 							ID:        1,
 							CreatedAt: mock.TestTime(1990),
 							UpdatedAt: mock.TestTime(2000),
@@ -461,7 +461,7 @@ func TestUpdate(t *testing.T) {
 						Email:      "golang@go.org",
 					}, nil
 				},
-				UpdateFn: func(db orm.DB, usr secundus.User) error {
+				UpdateFn: func(db orm.DB, usr secundusapi.User) error {
 					usr.UpdatedAt = mock.TestTime(2000)
 					return nil
 				},

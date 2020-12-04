@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/utl/secure"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/secure"
 
 	"github.com/go-pg/pg/v9"
 	"github.com/go-pg/pg/v9/orm"
@@ -28,7 +28,7 @@ func main() {
 	db := pg.Connect(u)
 	_, err = db.Exec("SELECT 1")
 	checkErr(err)
-	createSchema(db, &secundus.Company{}, &secundus.Location{}, &secundus.Role{}, &secundus.User{})
+	createSchema(db, secundusapi.Company{}, secundusapi.Location{}, secundusapi.Role{}, secundusapi.User{})
 
 	for _, v := range queries[0 : len(queries)-1] {
 		_, err := db.Exec(v)

@@ -3,27 +3,27 @@ package mock
 import (
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // RBAC Mock
 type RBAC struct {
-	UserFn            func(echo.Context) secundus.AuthUser
-	EnforceRoleFn     func(echo.Context, secundus.AccessRole) error
+	UserFn            func(echo.Context) secundusapi.AuthUser
+	EnforceRoleFn     func(echo.Context, secundusapi.AccessRole) error
 	EnforceUserFn     func(echo.Context, int) error
 	EnforceCompanyFn  func(echo.Context, int) error
 	EnforceLocationFn func(echo.Context, int) error
-	AccountCreateFn   func(echo.Context, secundus.AccessRole, int, int) error
-	IsLowerRoleFn     func(echo.Context, secundus.AccessRole) error
+	AccountCreateFn   func(echo.Context, secundusapi.AccessRole, int, int) error
+	IsLowerRoleFn     func(echo.Context, secundusapi.AccessRole) error
 }
 
 // User mock
-func (a RBAC) User(c echo.Context) secundus.AuthUser {
+func (a RBAC) User(c echo.Context) secundusapi.AuthUser {
 	return a.UserFn(c)
 }
 
 // EnforceRole mock
-func (a RBAC) EnforceRole(c echo.Context, role secundus.AccessRole) error {
+func (a RBAC) EnforceRole(c echo.Context, role secundusapi.AccessRole) error {
 	return a.EnforceRoleFn(c, role)
 }
 
@@ -43,11 +43,11 @@ func (a RBAC) EnforceLocation(c echo.Context, id int) error {
 }
 
 // AccountCreate mock
-func (a RBAC) AccountCreate(c echo.Context, roleID secundus.AccessRole, companyID, locationID int) error {
+func (a RBAC) AccountCreate(c echo.Context, roleID secundusapi.AccessRole, companyID, locationID int) error {
 	return a.AccountCreateFn(c, roleID, companyID, locationID)
 }
 
 // IsLowerRole mock
-func (a RBAC) IsLowerRole(c echo.Context, role secundus.AccessRole) error {
+func (a RBAC) IsLowerRole(c echo.Context, role secundusapi.AccessRole) error {
 	return a.IsLowerRoleFn(c, role)
 }

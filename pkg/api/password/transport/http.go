@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password"
 
 	"github.com/labstack/echo"
 )
@@ -67,7 +67,7 @@ type changeReq struct {
 func (h *HTTP) change(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return secundus.ErrBadRequest
+		return secundusapi.ErrBadRequest
 	}
 
 	p := new(changeReq)

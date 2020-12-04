@@ -3,18 +3,18 @@ package query
 import (
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // List prepares data for list queries
-func List(u secundus.AuthUser) (*secundus.ListQuery, error) {
+func List(u secundusapi.AuthUser) (*secundusapi.ListQuery, error) {
 	switch true {
-	case u.Role <= secundus.AdminRole: // user is SuperAdmin or Admin
+	case u.Role <= secundusapi.AdminRole: // user is SuperAdmin or Admin
 		return nil, nil
-	case u.Role == secundus.CompanyAdminRole:
-		return &secundus.ListQuery{Query: "company_id = ?", ID: u.CompanyID}, nil
-	case u.Role == secundus.LocationAdminRole:
-		return &secundus.ListQuery{Query: "location_id = ?", ID: u.LocationID}, nil
+	case u.Role == secundusapi.CompanyAdminRole:
+		return &secundusapi.ListQuery{Query: "company_id = ?", ID: u.CompanyID}, nil
+	case u.Role == secundusapi.LocationAdminRole:
+		return &secundusapi.ListQuery{Query: "location_id = ?", ID: u.LocationID}, nil
 	default:
 		return nil, echo.ErrForbidden
 	}

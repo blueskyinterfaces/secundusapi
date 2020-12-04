@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 
-	"github.com/secundusteam/secundus/pkg/utl/postgres"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/postgres"
 
 	"github.com/fortytw2/dockertest"
 )
@@ -48,7 +48,7 @@ func TestNew(t *testing.T) {
 		t.Fatalf("Error establishing connection %v", err)
 	}
 
-	var user secundus.User
+	var user secundusapi.User
 	db.Select(&user)
 
 	assert.NotNil(t, db)

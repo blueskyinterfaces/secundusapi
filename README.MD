@@ -1,6 +1,6 @@
-# Secundus Web
+# secundusapi API
 
-The following dependencies are used in this project (generated using [Glice](https://github.com/secundusteam/glice)):
+The following dependencies are used in this project (generated using [Glice](https://github.com/blueskyinterfaces/glice)):
 
 ```bash
 |-------------------------------------|--------------------------------------------|--------------|
@@ -36,9 +36,9 @@ Most of these can easily be replaced with your own choices since their usage is 
 
 ## Getting started
 
-Using secundus requires having Go 1.7 or above. Once you downloaded secundus (either using Git or go get) you need to configure the following:
+Using secundusapi requires having Go 1.7 or above. Once you downloaded secundusapi (either using Git or go get) you need to configure the following:
 
-1. To use secundus as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/` to `$GOPATH/github.com/secundusteam/secundus`. Replace all: gorsk -> secundus, ribice -> secundusteam
+1. To use secundusapi as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/` to `$GOPATH/github.com/blueskyinterfaces/secundusapiapi`. Replace all: gorsk -> secundus, ribice -> blueskyinterfaces
 
 2. Change the configuration file according to your needs, or create a new one.
 
@@ -112,7 +112,7 @@ Instead of passing database client as `s.db` , inside this function pass it as `
 
 1. Root directory contains things not related to code directly, e.g. docker-compose, CI/CD, readme, bash scripts etc. It should also contain vendor folder, Gopkg.toml and Gopkg.lock if dep is being used.
 
-2. Cmd package contains code for starting applications (main packages). The directory name for each application should match the name of the executable you want to have. secundus is structured as a monolith application but can be easily restructured to contain multiple microservices. An application may produce multiple binaries, therefore secundus uses the Go convention of placing main package as a subdirectory of the cmd package. As an example, scheduler application's binary would be located under cmd/cron. It also loads the necessery configuration and passes it to the service initializers.
+2. Cmd package contains code for starting applications (main packages). The directory name for each application should match the name of the executable you want to have. secundusapi is structured as a monolith application but can be easily restructured to contain multiple microservices. An application may produce multiple binaries, therefore secundusapi uses the Go convention of placing main package as a subdirectory of the cmd package. As an example, scheduler application's binary would be located under cmd/cron. It also loads the necessery configuration and passes it to the service initializers.
 
 3. Rest of the code is located under /pkg. The pkg directory contains `utl` and 'microservice' directories.
 
@@ -128,8 +128,8 @@ Instead of passing database client as `s.db` , inside this function pass it as `
 
 ## License
 
-secundus is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
+secundusapi is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
 
 ## Author
 
-[Emir Ribic](https://secundusteam.ba)
+[Emir Ribic](https://blueskyinterfaces.ba)

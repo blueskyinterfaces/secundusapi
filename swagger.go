@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 // Success response
 // swagger:response ok

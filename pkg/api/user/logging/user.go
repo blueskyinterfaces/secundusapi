@@ -5,12 +5,12 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/user"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/user"
 )
 
 // New creates new user logging service
-func New(svc user.Service, logger secundus.Logger) *LogService {
+func New(svc user.Service, logger secundusapi.Logger) *LogService {
 	return &LogService{
 		Service: svc,
 		logger:  logger,
@@ -20,13 +20,13 @@ func New(svc user.Service, logger secundus.Logger) *LogService {
 // LogService represents user logging service
 type LogService struct {
 	user.Service
-	logger secundus.Logger
+	logger secundusapi.Logger
 }
 
 const name = "user"
 
 // Create logging
-func (ls *LogService) Create(c echo.Context, req secundus.User) (resp secundus.User, err error) {
+func (ls *LogService) Create(c echo.Context, req secundusapi.User) (resp secundusapi.User, err error) {
 	defer func(begin time.Time) {
 		req.Password = "xxx-redacted-xxx"
 		ls.logger.Log(
@@ -43,7 +43,7 @@ func (ls *LogService) Create(c echo.Context, req secundus.User) (resp secundus.U
 }
 
 // List logging
-func (ls *LogService) List(c echo.Context, req secundus.Pagination) (resp []secundus.User, err error) {
+func (ls *LogService) List(c echo.Context, req secundusapi.Pagination) (resp []secundusapi.User, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			c,
@@ -59,7 +59,7 @@ func (ls *LogService) List(c echo.Context, req secundus.Pagination) (resp []secu
 }
 
 // View logging
-func (ls *LogService) View(c echo.Context, req int) (resp secundus.User, err error) {
+func (ls *LogService) View(c echo.Context, req int) (resp secundusapi.User, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			c,
@@ -90,7 +90,7 @@ func (ls *LogService) Delete(c echo.Context, req int) (err error) {
 }
 
 // Update logging
-func (ls *LogService) Update(c echo.Context, req user.Update) (resp secundus.User, err error) {
+func (ls *LogService) Update(c echo.Context, req user.Update) (resp secundusapi.User, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			c,

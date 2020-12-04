@@ -28,25 +28,25 @@ import (
 	"crypto/sha1"
 
 	"github.com/labstack/echo"
-	"github.com/secundusteam/secundus/pkg/utl/zlog"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/zlog"
 
-	"github.com/secundusteam/secundus/pkg/api/auth"
-	al "github.com/secundusteam/secundus/pkg/api/auth/logging"
-	at "github.com/secundusteam/secundus/pkg/api/auth/transport"
-	"github.com/secundusteam/secundus/pkg/api/password"
-	pl "github.com/secundusteam/secundus/pkg/api/password/logging"
-	pt "github.com/secundusteam/secundus/pkg/api/password/transport"
-	"github.com/secundusteam/secundus/pkg/api/user"
-	ul "github.com/secundusteam/secundus/pkg/api/user/logging"
-	ut "github.com/secundusteam/secundus/pkg/api/user/transport"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/auth"
+	al "github.com/blueskyinterfaces/secundusapi/pkg/api/auth/logging"
+	at "github.com/blueskyinterfaces/secundusapi/pkg/api/auth/transport"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password"
+	pl "github.com/blueskyinterfaces/secundusapi/pkg/api/password/logging"
+	pt "github.com/blueskyinterfaces/secundusapi/pkg/api/password/transport"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/user"
+	ul "github.com/blueskyinterfaces/secundusapi/pkg/api/user/logging"
+	ut "github.com/blueskyinterfaces/secundusapi/pkg/api/user/transport"
 
-	"github.com/secundusteam/secundus/pkg/utl/config"
-	"github.com/secundusteam/secundus/pkg/utl/jwt"
-	authMw "github.com/secundusteam/secundus/pkg/utl/middleware/auth"
-	"github.com/secundusteam/secundus/pkg/utl/postgres"
-	"github.com/secundusteam/secundus/pkg/utl/rbac"
-	"github.com/secundusteam/secundus/pkg/utl/secure"
-	"github.com/secundusteam/secundus/pkg/utl/server"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/config"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/jwt"
+	authMw "github.com/blueskyinterfaces/secundusapi/pkg/utl/middleware/auth"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/postgres"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/rbac"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/secure"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/server"
 )
 
 // Start starts the API service
@@ -66,7 +66,6 @@ func Start(cfg *config.Configuration) error {
 	log := zlog.New()
 
 	e := server.New()
-	e.Static("/", "assets/app/dist")
 	e.Static("/swaggerui", cfg.App.SwaggerUIPath)
 
 	e.HTTPErrorHandler = customHTTPErrorHandler

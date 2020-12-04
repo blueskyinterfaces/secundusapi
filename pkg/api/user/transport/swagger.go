@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // User model response
@@ -9,7 +9,7 @@ import (
 type swaggUserResponse struct {
 	// in:body
 	Body struct {
-		*secundus.User
+		*secundusapi.User
 	}
 }
 
@@ -18,7 +18,7 @@ type swaggUserResponse struct {
 type swaggUserListResponse struct {
 	// in:body
 	Body struct {
-		Users []secundus.User `json:"users"`
-		Page  int             `json:"page"`
+		Users []secundusapi.User `json:"users"`
+		Page  int                `json:"page"`
 	}
 }

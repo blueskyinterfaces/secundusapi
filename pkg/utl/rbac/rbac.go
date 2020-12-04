@@ -3,7 +3,7 @@ package rbac
 import (
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // Service is RBAC application service
@@ -17,14 +17,14 @@ func checkBool(b bool) error {
 }
 
 // User returns user data stored in jwt token
-func (s Service) User(c echo.Context) secundus.AuthUser {
+func (s Service) User(c echo.Context) secundusapi.AuthUser {
 	id := c.Get("id").(int)
 	companyID := c.Get("company_id").(int)
 	locationID := c.Get("location_id").(int)
 	user := c.Get("username").(string)
 	email := c.Get("email").(string)
-	role := c.Get("role").(secundus.AccessRole)
-	return secundus.AuthUser{
+	role := c.Get("role").(secundusapi.AccessRole)
+	return secundusapi.AuthUser{
 		ID:         id,
 		Username:   user,
 		CompanyID:  companyID,
@@ -35,8 +35,8 @@ func (s Service) User(c echo.Context) secundus.AuthUser {
 }
 
 // EnforceRole authorizes request by AccessRole
-func (s Service) EnforceRole(c echo.Context, r secundus.AccessRole) error {
-	return checkBool(!(c.Get("role").(secundus.AccessRole) > r))
+func (s Service) EnforceRole(c echo.Context, r secundusapi.AccessRole) error {
+	return checkBool(!(c.Get("role").(secundusapi.AccessRole) > r))
 }
 
 // EnforceUser checks whether the request to change user data is done by the same user
@@ -56,7 +56,7 @@ func (s Service) EnforceCompany(c echo.Context, ID int) error {
 	if s.isAdmin(c) {
 		return nil
 	}
-	if err := s.EnforceRole(c, secundus.CompanyAdminRole); err != nil {
+	if err := s.EnforceRole(c, secundusapi.CompanyAdminRole); err != nil {
 		return err
 	}
 	return checkBool(c.Get("company_id").(int) == ID)
@@ -68,24 +68,24 @@ func (s Service) EnforceLocation(c echo.Context, ID int) error {
 	if s.isCompanyAdmin(c) {
 		return nil
 	}
-	if err := s.EnforceRole(c, secundus.LocationAdminRole); err != nil {
+	if err := s.EnforceRole(c, secundusapi.LocationAdminRole); err != nil {
 		return err
 	}
 	return checkBool(c.Get("location_id").(int) == ID)
 }
 
 func (s Service) isAdmin(c echo.Context) bool {
-	return !(c.Get("role").(secundus.AccessRole) > secundus.AdminRole)
+	return !(c.Get("role").(secundusapi.AccessRole) > secundusapi.AdminRole)
 }
 
 func (s Service) isCompanyAdmin(c echo.Context) bool {
 	// Must query company ID in database for the given user
-	return !(c.Get("role").(secundus.AccessRole) > secundus.CompanyAdminRole)
+	return !(c.Get("role").(secundusapi.AccessRole) > secundusapi.CompanyAdminRole)
 }
 
 // AccountCreate performs auth check when creating a new account
 // Location admin cannot create accounts, needs to be fixed on EnforceLocation function
-func (s Service) AccountCreate(c echo.Context, roleID secundus.AccessRole, companyID, locationID int) error {
+func (s Service) AccountCreate(c echo.Context, roleID secundusapi.AccessRole, companyID, locationID int) error {
 	if err := s.EnforceLocation(c, locationID); err != nil {
 		return err
 	}
@@ -94,6 +94,6 @@ func (s Service) AccountCreate(c echo.Context, roleID secundus.AccessRole, compa
 
 // IsLowerRole checks whether the requesting user has higher role than the user it wants to change
 // Used for account creation/deletion
-func (s Service) IsLowerRole(c echo.Context, r secundus.AccessRole) error {
-	return checkBool(c.Get("role").(secundus.AccessRole) < r)
+func (s Service) IsLowerRole(c echo.Context, r secundusapi.AccessRole) error {
+	return checkBool(c.Get("role").(secundusapi.AccessRole) < r)
 }

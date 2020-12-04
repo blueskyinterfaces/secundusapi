@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 // Pagination constants
 const (

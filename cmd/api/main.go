@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 
-	"github.com/secundusteam/secundus/pkg/api"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api"
 
-	"github.com/secundusteam/secundus/pkg/utl/config"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/config"
 )
 
 func main() {

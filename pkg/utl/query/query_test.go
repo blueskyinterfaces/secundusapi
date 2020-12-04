@@ -5,54 +5,54 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/secundusteam/secundus/pkg/utl/query"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/query"
 )
 
 func TestList(t *testing.T) {
 	type args struct {
-		user secundus.AuthUser
+		user secundusapi.AuthUser
 	}
 	cases := []struct {
 		name     string
 		args     args
-		wantData *secundus.ListQuery
+		wantData *secundusapi.ListQuery
 		wantErr  error
 	}{
 		{
 			name: "Super admin user",
-			args: args{user: secundus.AuthUser{
-				Role: secundus.SuperAdminRole,
+			args: args{user: secundusapi.AuthUser{
+				Role: secundusapi.SuperAdminRole,
 			}},
 		},
 		{
 			name: "Company admin user",
-			args: args{user: secundus.AuthUser{
-				Role:      secundus.CompanyAdminRole,
+			args: args{user: secundusapi.AuthUser{
+				Role:      secundusapi.CompanyAdminRole,
 				CompanyID: 1,
 			}},
-			wantData: &secundus.ListQuery{
+			wantData: &secundusapi.ListQuery{
 				Query: "company_id = ?",
 				ID:    1},
 		},
 		{
 			name: "Location admin user",
-			args: args{user: secundus.AuthUser{
-				Role:       secundus.LocationAdminRole,
+			args: args{user: secundusapi.AuthUser{
+				Role:       secundusapi.LocationAdminRole,
 				CompanyID:  1,
 				LocationID: 2,
 			}},
-			wantData: &secundus.ListQuery{
+			wantData: &secundusapi.ListQuery{
 				Query: "location_id = ?",
 				ID:    2},
 		},
 		{
 			name: "Normal user",
-			args: args{user: secundus.AuthUser{
-				Role: secundus.UserRole,
+			args: args{user: secundusapi.AuthUser{
+				Role: secundusapi.UserRole,
 			}},
 			wantErr: echo.ErrForbidden,
 		},

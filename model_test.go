@@ -1,15 +1,15 @@
-package secundus_test
+package secundusapi_test
 
 import (
 	"context"
 	"testing"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
 )
 
 func TestBeforeInsert(t *testing.T) {
-	base := &secundus.Base{
+	base := secundusapi.Base{
 		ID: 1,
 	}
 	base.BeforeInsert(context.TODO())
@@ -22,7 +22,7 @@ func TestBeforeInsert(t *testing.T) {
 }
 
 func TestBeforeUpdate(t *testing.T) {
-	base := &secundus.Base{
+	base := secundusapi.Base{
 		ID:        1,
 		CreatedAt: mock.TestTime(2000),
 	}
@@ -34,7 +34,7 @@ func TestBeforeUpdate(t *testing.T) {
 }
 
 func TestPaginationTransform(t *testing.T) {
-	p := &secundus.PaginationReq{
+	p := secundusapi.PaginationReq{
 		Limit: 5000, Page: 5,
 	}
 

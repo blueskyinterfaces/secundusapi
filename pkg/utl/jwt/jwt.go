@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -48,12 +48,12 @@ type Service struct {
 func (s Service) ParseToken(authHeader string) (*jwt.Token, error) {
 	parts := strings.SplitN(authHeader, " ", 2)
 	if !(len(parts) == 2 && parts[0] == "Bearer") {
-		return nil, secundus.ErrGeneric
+		return nil, secundusapi.ErrGeneric
 	}
 
 	return jwt.Parse(parts[1], func(token *jwt.Token) (interface{}, error) {
 		if s.algo != token.Method {
-			return nil, secundus.ErrGeneric
+			return nil, secundusapi.ErrGeneric
 		}
 		return s.key, nil
 	})
@@ -61,7 +61,7 @@ func (s Service) ParseToken(authHeader string) (*jwt.Token, error) {
 }
 
 // GenerateToken generates new JWT token and populates it with user data
-func (s Service) GenerateToken(u secundus.User) (string, error) {
+func (s Service) GenerateToken(u secundusapi.User) (string, error) {
 	return jwt.NewWithClaims(s.algo, jwt.MapClaims{
 		"id":  u.Base.ID,
 		"u":   u.Username,

@@ -23,26 +23,6 @@
             "env": {},
             "args": [],
             "cwd": "${workspaceRoot}/cmd/migration/"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Debug Client",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}/assets/app/src",
-            "breakOnLoad": false,
-            "sourceMapPathOverrides": {
-              "webpack:///src/*": "${webRoot}/*"
-            },
-            "preLaunchTask": "Client Serve",
-            "postDebugTask": "Terminate All Tasks",
-            "trace": "verbose"
-          },
-    ],
-    "compounds": [
-      {
-        "name": "Debug Server/Client",
-        "configurations": ["Debug Server", "Debug Client"]
-      }
+        }
     ]
 }

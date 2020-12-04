@@ -1,4 +1,4 @@
-module github.com/secundusteam/secundus
+module github.com/blueskyinterfaces/secundusapi
 
 go 1.15
 

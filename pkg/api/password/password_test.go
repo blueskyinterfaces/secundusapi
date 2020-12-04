@@ -3,14 +3,14 @@ package password_test
 import (
 	"testing"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password"
 
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus/pkg/utl/mock"
-	"github.com/secundusteam/secundus/pkg/utl/mock/mockdb"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock/mockdb"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -34,7 +34,7 @@ func TestChange(t *testing.T) {
 			args: args{id: 1},
 			rbac: &mock.RBAC{
 				EnforceUserFn: func(c echo.Context, id int) error {
-					return secundus.ErrGeneric
+					return secundusapi.ErrGeneric
 				}},
 			wantErr: true,
 		},
@@ -47,11 +47,11 @@ func TestChange(t *testing.T) {
 					return nil
 				}},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
 					if id != 1 {
-						return secundus.User{}, nil
+						return secundusapi.User{}, nil
 					}
-					return secundus.User{}, secundus.ErrGeneric
+					return secundusapi.User{}, secundusapi.ErrGeneric
 				},
 			},
 		},
@@ -64,8 +64,8 @@ func TestChange(t *testing.T) {
 				}},
 			wantErr: true,
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
 						Password: "HashedPassword",
 					}, nil
 				},
@@ -85,8 +85,8 @@ func TestChange(t *testing.T) {
 				}},
 			wantErr: true,
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
 						Password: "HashedPassword",
 					}, nil
 				},
@@ -108,12 +108,12 @@ func TestChange(t *testing.T) {
 					return nil
 				}},
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{
 						Password: "$2a$10$udRBroNGBeOYwSWCVzf6Lulg98uAoRCIi4t75VZg84xgw6EJbFNsG",
 					}, nil
 				},
-				UpdateFn: func(orm.DB, secundus.User) error {
+				UpdateFn: func(orm.DB, secundusapi.User) error {
 					return nil
 				},
 			},

@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 // AccessRole represents access role type
 type AccessRole int

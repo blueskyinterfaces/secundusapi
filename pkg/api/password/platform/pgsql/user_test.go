@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password/platform/pgsql"
-	"github.com/secundusteam/secundus/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password/platform/pgsql"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
 )
 
 func TestView(t *testing.T) {
@@ -15,7 +15,7 @@ func TestView(t *testing.T) {
 		name     string
 		wantErr  bool
 		id       int
-		wantData secundus.User
+		wantData secundusapi.User
 	}{
 		{
 			name:    "User does not exist",
@@ -25,7 +25,7 @@ func TestView(t *testing.T) {
 		{
 			name: "Success",
 			id:   2,
-			wantData: secundus.User{
+			wantData: secundusapi.User{
 				Email:      "tomjones@mail.com",
 				FirstName:  "Tom",
 				LastName:   "Jones",
@@ -34,7 +34,7 @@ func TestView(t *testing.T) {
 				CompanyID:  1,
 				LocationID: 1,
 				Password:   "newPass",
-				Base: secundus.Base{
+				Base: secundusapi.Base{
 					ID: 2,
 				},
 			},
@@ -44,9 +44,9 @@ func TestView(t *testing.T) {
 	dbCon := mock.NewPGContainer(t)
 	defer dbCon.Shutdown()
 
-	db := mock.NewDB(t, dbCon, &secundus.Role{}, &secundus.User{})
+	db := mock.NewDB(t, dbCon, secundusapi.Role{}, secundusapi.User{})
 
-	if err := mock.InsertMultiple(db, &secundus.Role{
+	if err := mock.InsertMultiple(db, secundusapi.Role{
 		ID:          1,
 		AccessLevel: 1,
 		Name:        "SUPER_ADMIN"}, &cases[1].wantData); err != nil {
@@ -76,13 +76,13 @@ func TestUpdate(t *testing.T) {
 	cases := []struct {
 		name     string
 		wantErr  bool
-		usr      secundus.User
-		wantData secundus.User
+		usr      secundusapi.User
+		wantData secundusapi.User
 	}{
 		{
 			name: "Success",
-			usr: secundus.User{
-				Base: secundus.Base{
+			usr: secundusapi.User{
+				Base: secundusapi.Base{
 					ID: 2,
 				},
 				FirstName: "Z",
@@ -92,7 +92,7 @@ func TestUpdate(t *testing.T) {
 				Mobile:    "345678",
 				Username:  "newUsername",
 			},
-			wantData: secundus.User{
+			wantData: secundusapi.User{
 				Email:      "tomjones@mail.com",
 				FirstName:  "Z",
 				LastName:   "Freak",
@@ -104,7 +104,7 @@ func TestUpdate(t *testing.T) {
 				Address:    "Address",
 				Phone:      "123456",
 				Mobile:     "345678",
-				Base: secundus.Base{
+				Base: secundusapi.Base{
 					ID: 2,
 				},
 			},
@@ -114,9 +114,9 @@ func TestUpdate(t *testing.T) {
 	dbCon := mock.NewPGContainer(t)
 	defer dbCon.Shutdown()
 
-	db := mock.NewDB(t, dbCon, &secundus.Role{}, &secundus.User{})
+	db := mock.NewDB(t, dbCon, secundusapi.Role{}, secundusapi.User{})
 
-	if err := mock.InsertMultiple(db, &secundus.Role{
+	if err := mock.InsertMultiple(db, secundusapi.Role{
 		ID:          1,
 		AccessLevel: 1,
 		Name:        "SUPER_ADMIN"}, &cases[0].usr); err != nil {
@@ -130,8 +130,8 @@ func TestUpdate(t *testing.T) {
 			err := udb.Update(db, tt.wantData)
 			assert.Equal(t, tt.wantErr, err != nil)
 			if tt.wantData.ID != 0 {
-				user := secundus.User{
-					Base: secundus.Base{
+				user := secundusapi.User{
+					Base: secundusapi.Base{
 						ID: tt.usr.ID,
 					},
 				}

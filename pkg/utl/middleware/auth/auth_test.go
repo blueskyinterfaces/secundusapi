@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/utl/middleware/auth"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/middleware/auth"
 )
 
 func echoHandler(mw ...echo.MiddlewareFunc) *echo.Echo {
@@ -32,7 +32,7 @@ type tokenParser struct {
 
 func (t tokenParser) ParseToken(s string) (*jwt.Token, error) {
 	if s == "" {
-		return nil, secundus.ErrGeneric
+		return nil, secundusapi.ErrGeneric
 	}
 	return &jwt.Token{
 		Raw:    "abcd",

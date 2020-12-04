@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 // Company represents company model
 type Company struct {

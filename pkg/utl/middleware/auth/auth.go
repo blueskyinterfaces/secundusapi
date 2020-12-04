@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // TokenParser represents JWT token parser
@@ -30,7 +30,7 @@ func Middleware(tokenParser TokenParser) echo.MiddlewareFunc {
 			locationID := int(claims["l"].(float64))
 			username := claims["u"].(string)
 			email := claims["e"].(string)
-			role := secundus.AccessRole(claims["r"].(float64))
+			role := secundusapi.AccessRole(claims["r"].(float64))
 
 			c.Set("id", id)
 			c.Set("company_id", companyID)

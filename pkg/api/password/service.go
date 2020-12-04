@@ -5,8 +5,8 @@ import (
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password/platform/pgsql"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password/platform/pgsql"
 )
 
 // Service represents password application interface
@@ -39,8 +39,8 @@ type Password struct {
 
 // UserDB represents user repository interface
 type UserDB interface {
-	View(orm.DB, int) (secundus.User, error)
-	Update(orm.DB, secundus.User) error
+	View(orm.DB, int) (secundusapi.User, error)
+	Update(orm.DB, secundusapi.User) error
 }
 
 // Securer represents security interface

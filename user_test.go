@@ -1,13 +1,13 @@
-package secundus_test
+package secundusapi_test
 
 import (
 	"testing"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 func TestChangePassword(t *testing.T) {
-	user := &secundus.User{
+	user := secundusapi.User{
 		FirstName: "TestGuy",
 	}
 
@@ -25,7 +25,7 @@ func TestChangePassword(t *testing.T) {
 }
 
 func TestUpdateLastLogin(t *testing.T) {
-	user := &secundus.User{
+	user := secundusapi.User{
 		FirstName: "TestGuy",
 	}
 

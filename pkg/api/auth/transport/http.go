@@ -3,7 +3,7 @@ package transport
 import (
 	"net/http"
 
-	"github.com/secundusteam/secundus/pkg/api/auth"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/auth"
 
 	"github.com/labstack/echo"
 )

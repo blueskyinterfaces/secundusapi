@@ -5,12 +5,12 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password"
 )
 
 // New creates new password logging service
-func New(svc password.Service, logger secundus.Logger) *LogService {
+func New(svc password.Service, logger secundusapi.Logger) *LogService {
 	return &LogService{
 		Service: svc,
 		logger:  logger,
@@ -20,7 +20,7 @@ func New(svc password.Service, logger secundus.Logger) *LogService {
 // LogService represents password logging service
 type LogService struct {
 	password.Service
-	logger secundus.Logger
+	logger secundusapi.Logger
 }
 
 const name = "password"

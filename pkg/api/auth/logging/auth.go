@@ -5,12 +5,12 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/auth"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/auth"
 )
 
 // New creates new auth logging service
-func New(svc auth.Service, logger secundus.Logger) *LogService {
+func New(svc auth.Service, logger secundusapi.Logger) *LogService {
 	return &LogService{
 		Service: svc,
 		logger:  logger,
@@ -20,13 +20,13 @@ func New(svc auth.Service, logger secundus.Logger) *LogService {
 // LogService represents auth logging service
 type LogService struct {
 	auth.Service
-	logger secundus.Logger
+	logger secundusapi.Logger
 }
 
 const name = "auth"
 
 // Authenticate logging
-func (ls *LogService) Authenticate(c echo.Context, user, password string) (resp secundus.AuthToken, err error) {
+func (ls *LogService) Authenticate(c echo.Context, user, password string) (resp secundusapi.AuthToken, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			c,
@@ -57,7 +57,7 @@ func (ls *LogService) Refresh(c echo.Context, req string) (token string, err err
 }
 
 // Me logging
-func (ls *LogService) Me(c echo.Context) (resp secundus.User, err error) {
+func (ls *LogService) Me(c echo.Context) (resp secundusapi.User, err error) {
 	defer func(begin time.Time) {
 		ls.logger.Log(
 			c,

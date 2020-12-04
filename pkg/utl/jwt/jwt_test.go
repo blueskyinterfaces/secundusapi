@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/utl/jwt"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/jwt"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,7 +15,7 @@ func TestGenerateToken(t *testing.T) {
 		algo         string
 		secret       string
 		minSecretLen int
-		req          secundus.User
+		req          secundusapi.User
 		wantErr      bool
 		want         string
 	}{
@@ -42,14 +42,14 @@ func TestGenerateToken(t *testing.T) {
 			algo:         "HS256",
 			secret:       "g0r$kt3$t1ng",
 			minSecretLen: 1,
-			req: secundus.User{
-				Base: secundus.Base{
+			req: secundusapi.User{
+				Base: secundusapi.Base{
 					ID: 1,
 				},
 				Username: "johndoe",
 				Email:    "johndoe@mail.com",
-				Role: &secundus.Role{
-					AccessLevel: secundus.SuperAdminRole,
+				Role: &secundusapi.Role{
+					AccessLevel: secundusapi.SuperAdminRole,
 				},
 				CompanyID:  1,
 				LocationID: 1,

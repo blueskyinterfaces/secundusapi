@@ -4,7 +4,7 @@ import (
 	"crypto/sha1"
 	"testing"
 
-	"github.com/secundusteam/secundus/pkg/utl/secure"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/secure"
 	"github.com/stretchr/testify/assert"
 )
 

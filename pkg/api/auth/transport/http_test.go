@@ -9,14 +9,14 @@ import (
 
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/auth"
-	"github.com/secundusteam/secundus/pkg/api/auth/transport"
-	"github.com/secundusteam/secundus/pkg/utl/jwt"
-	authMw "github.com/secundusteam/secundus/pkg/utl/middleware/auth"
-	"github.com/secundusteam/secundus/pkg/utl/mock"
-	"github.com/secundusteam/secundus/pkg/utl/mock/mockdb"
-	"github.com/secundusteam/secundus/pkg/utl/server"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/auth"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/auth/transport"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/jwt"
+	authMw "github.com/blueskyinterfaces/secundusapi/pkg/utl/middleware/auth"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock/mockdb"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/server"
 
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/stretchr/testify/assert"
@@ -27,7 +27,7 @@ func TestLogin(t *testing.T) {
 		name       string
 		req        string
 		wantStatus int
-		wantResp   *secundus.AuthToken
+		wantResp   *secundusapi.AuthToken
 		udb        *mockdb.User
 		jwt        *mock.JWT
 		sec        *mock.Secure
@@ -42,8 +42,8 @@ func TestLogin(t *testing.T) {
 			req:        `{"username":"juzernejm","password":"hunter123"}`,
 			wantStatus: http.StatusInternalServerError,
 			udb: &mockdb.User{
-				FindByUsernameFn: func(orm.DB, string) (secundus.User, error) {
-					return secundus.User{}, secundus.ErrGeneric
+				FindByUsernameFn: func(orm.DB, string) (secundusapi.User, error) {
+					return secundusapi.User{}, secundusapi.ErrGeneric
 				},
 			},
 		},
@@ -52,18 +52,18 @@ func TestLogin(t *testing.T) {
 			req:        `{"username":"juzernejm","password":"hunter123"}`,
 			wantStatus: http.StatusOK,
 			udb: &mockdb.User{
-				FindByUsernameFn: func(orm.DB, string) (secundus.User, error) {
-					return secundus.User{
+				FindByUsernameFn: func(orm.DB, string) (secundusapi.User, error) {
+					return secundusapi.User{
 						Password: "hunter123",
 						Active:   true,
 					}, nil
 				},
-				UpdateFn: func(db orm.DB, u secundus.User) error {
+				UpdateFn: func(db orm.DB, u secundusapi.User) error {
 					return nil
 				},
 			},
 			jwt: &mock.JWT{
-				GenerateTokenFn: func(secundus.User) (string, error) {
+				GenerateTokenFn: func(secundusapi.User) (string, error) {
 					return "jwttokenstring", nil
 				},
 			},
@@ -75,7 +75,7 @@ func TestLogin(t *testing.T) {
 					return "refreshtoken"
 				},
 			},
-			wantResp: &secundus.AuthToken{Token: "jwttokenstring", RefreshToken: "refreshtoken"},
+			wantResp: &secundusapi.AuthToken{Token: "jwttokenstring", RefreshToken: "refreshtoken"},
 		},
 	}
 
@@ -92,7 +92,7 @@ func TestLogin(t *testing.T) {
 			}
 			defer res.Body.Close()
 			if tt.wantResp != nil {
-				response := new(secundus.AuthToken)
+				response := new(secundusapi.AuthToken)
 				if err := json.NewDecoder(res.Body).Decode(response); err != nil {
 					t.Fatal(err)
 				}
@@ -109,7 +109,7 @@ func TestRefresh(t *testing.T) {
 		name       string
 		req        string
 		wantStatus int
-		wantResp   *secundus.RefreshToken
+		wantResp   *secundusapi.RefreshToken
 		udb        *mockdb.User
 		jwt        *mock.JWT
 	}{
@@ -118,8 +118,8 @@ func TestRefresh(t *testing.T) {
 			req:        "refreshtoken",
 			wantStatus: http.StatusInternalServerError,
 			udb: &mockdb.User{
-				FindByTokenFn: func(orm.DB, string) (secundus.User, error) {
-					return secundus.User{}, secundus.ErrGeneric
+				FindByTokenFn: func(orm.DB, string) (secundusapi.User, error) {
+					return secundusapi.User{}, secundusapi.ErrGeneric
 				},
 			},
 		},
@@ -128,19 +128,19 @@ func TestRefresh(t *testing.T) {
 			req:        "refreshtoken",
 			wantStatus: http.StatusOK,
 			udb: &mockdb.User{
-				FindByTokenFn: func(orm.DB, string) (secundus.User, error) {
-					return secundus.User{
+				FindByTokenFn: func(orm.DB, string) (secundusapi.User, error) {
+					return secundusapi.User{
 						Username: "johndoe",
 						Active:   true,
 					}, nil
 				},
 			},
 			jwt: &mock.JWT{
-				GenerateTokenFn: func(secundus.User) (string, error) {
+				GenerateTokenFn: func(secundusapi.User) (string, error) {
 					return "jwttokenstring", nil
 				},
 			},
-			wantResp: &secundus.RefreshToken{Token: "jwttokenstring"},
+			wantResp: &secundusapi.RefreshToken{Token: "jwttokenstring"},
 		},
 	}
 
@@ -157,7 +157,7 @@ func TestRefresh(t *testing.T) {
 			}
 			defer res.Body.Close()
 			if tt.wantResp != nil {
-				response := new(secundus.RefreshToken)
+				response := new(secundusapi.RefreshToken)
 				if err := json.NewDecoder(res.Body).Decode(response); err != nil {
 					t.Fatal(err)
 				}
@@ -172,7 +172,7 @@ func TestMe(t *testing.T) {
 	cases := []struct {
 		name       string
 		wantStatus int
-		wantResp   secundus.User
+		wantResp   secundusapi.User
 		header     string
 		udb        *mockdb.User
 		rbac       *mock.RBAC
@@ -181,13 +181,13 @@ func TestMe(t *testing.T) {
 			name:       "Fail on user view",
 			wantStatus: http.StatusInternalServerError,
 			udb: &mockdb.User{
-				ViewFn: func(orm.DB, int) (secundus.User, error) {
-					return secundus.User{}, secundus.ErrGeneric
+				ViewFn: func(orm.DB, int) (secundusapi.User, error) {
+					return secundusapi.User{}, secundusapi.ErrGeneric
 				},
 			},
 			rbac: &mock.RBAC{
-				UserFn: func(echo.Context) secundus.AuthUser {
-					return secundus.AuthUser{ID: 1}
+				UserFn: func(echo.Context) secundusapi.AuthUser {
+					return secundusapi.AuthUser{ID: 1}
 				},
 			},
 			header: mock.HeaderValid(),
@@ -196,9 +196,9 @@ func TestMe(t *testing.T) {
 			name:       "Success",
 			wantStatus: http.StatusOK,
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, i int) (secundus.User, error) {
-					return secundus.User{
-						Base: secundus.Base{
+				ViewFn: func(db orm.DB, i int) (secundusapi.User, error) {
+					return secundusapi.User{
+						Base: secundusapi.Base{
 							ID: i,
 						},
 						CompanyID:  2,
@@ -210,13 +210,13 @@ func TestMe(t *testing.T) {
 				},
 			},
 			rbac: &mock.RBAC{
-				UserFn: func(echo.Context) secundus.AuthUser {
-					return secundus.AuthUser{ID: 1}
+				UserFn: func(echo.Context) secundusapi.AuthUser {
+					return secundusapi.AuthUser{ID: 1}
 				},
 			},
 			header: mock.HeaderValid(),
-			wantResp: secundus.User{
-				Base: secundus.Base{
+			wantResp: secundusapi.User{
+				Base: secundusapi.Base{
 					ID: 1,
 				},
 				CompanyID:  2,
@@ -252,7 +252,7 @@ func TestMe(t *testing.T) {
 			}
 			defer res.Body.Close()
 			if tt.wantResp.ID != 0 {
-				var response secundus.User
+				var response secundusapi.User
 				if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
 					t.Fatal(err)
 				}

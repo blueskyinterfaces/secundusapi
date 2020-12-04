@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 // Location represents company location model
 type Location struct {

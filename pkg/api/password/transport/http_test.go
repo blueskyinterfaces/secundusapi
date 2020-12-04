@@ -6,13 +6,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/password"
-	"github.com/secundusteam/secundus/pkg/api/password/transport"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/password/transport"
 
-	"github.com/secundusteam/secundus/pkg/utl/mock"
-	"github.com/secundusteam/secundus/pkg/utl/mock/mockdb"
-	"github.com/secundusteam/secundus/pkg/utl/server"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/mock/mockdb"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/server"
 
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/labstack/echo"
@@ -67,10 +67,10 @@ func TestChangePassword(t *testing.T) {
 			},
 			id: "1",
 			udb: &mockdb.User{
-				ViewFn: func(db orm.DB, id int) (secundus.User, error) {
-					return secundus.User{Password: "oldPassword"}, nil
+				ViewFn: func(db orm.DB, id int) (secundusapi.User, error) {
+					return secundusapi.User{Password: "oldPassword"}, nil
 				},
-				UpdateFn: func(db orm.DB, usr secundus.User) error {
+				UpdateFn: func(db orm.DB, usr secundusapi.User) error {
 					return nil
 				},
 			},

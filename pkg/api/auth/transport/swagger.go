@@ -1,7 +1,7 @@
 package transport
 
 import (
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // Login request
@@ -16,7 +16,7 @@ type swaggLoginReq struct {
 type swaggLoginResp struct {
 	// in:body
 	Body struct {
-		*secundus.AuthToken
+		*secundusapi.AuthToken
 	}
 }
 
@@ -25,6 +25,6 @@ type swaggLoginResp struct {
 type swaggRefreshResp struct {
 	// in:body
 	Body struct {
-		*secundus.RefreshToken
+		*secundusapi.RefreshToken
 	}
 }

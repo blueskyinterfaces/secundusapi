@@ -5,17 +5,17 @@ import (
 	"github.com/go-pg/pg/v9/orm"
 	"github.com/labstack/echo"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/user/platform/pgsql"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/user/platform/pgsql"
 )
 
 // Service represents user application interface
 type Service interface {
-	Create(echo.Context, secundus.User) (secundus.User, error)
-	List(echo.Context, secundus.Pagination) ([]secundus.User, error)
-	View(echo.Context, int) (secundus.User, error)
+	Create(echo.Context, secundusapi.User) (secundusapi.User, error)
+	List(echo.Context, secundusapi.Pagination) ([]secundusapi.User, error)
+	View(echo.Context, int) (secundusapi.User, error)
 	Delete(echo.Context, int) error
-	Update(echo.Context, Update) (secundus.User, error)
+	Update(echo.Context, Update) (secundusapi.User, error)
 }
 
 // New creates new user application service
@@ -43,17 +43,17 @@ type Securer interface {
 
 // UDB represents user repository interface
 type UDB interface {
-	Create(orm.DB, secundus.User) (secundus.User, error)
-	View(orm.DB, int) (secundus.User, error)
-	List(orm.DB, *secundus.ListQuery, secundus.Pagination) ([]secundus.User, error)
-	Update(orm.DB, secundus.User) error
-	Delete(orm.DB, secundus.User) error
+	Create(orm.DB, secundusapi.User) (secundusapi.User, error)
+	View(orm.DB, int) (secundusapi.User, error)
+	List(orm.DB, *secundusapi.ListQuery, secundusapi.Pagination) ([]secundusapi.User, error)
+	Update(orm.DB, secundusapi.User) error
+	Delete(orm.DB, secundusapi.User) error
 }
 
 // RBAC represents role-based-access-control interface
 type RBAC interface {
-	User(echo.Context) secundus.AuthUser
+	User(echo.Context) secundusapi.AuthUser
 	EnforceUser(echo.Context, int) error
-	AccountCreate(echo.Context, secundus.AccessRole, int, int) error
-	IsLowerRole(echo.Context, secundus.AccessRole) error
+	AccountCreate(echo.Context, secundusapi.AccessRole, int, int) error
+	IsLowerRole(echo.Context, secundusapi.AccessRole) error
 }

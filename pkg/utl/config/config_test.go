@@ -3,7 +3,7 @@ package config_test
 import (
 	"testing"
 
-	"github.com/secundusteam/secundus/pkg/utl/config"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/config"
 	"github.com/stretchr/testify/assert"
 )
 

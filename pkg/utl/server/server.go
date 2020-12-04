@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/middleware"
-	"github.com/secundusteam/secundus/pkg/utl/middleware/secure"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/middleware/secure"
 
 	"github.com/labstack/echo"
 )

@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/secundusteam/secundus/pkg/utl/middleware/secure"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/middleware/secure"
 
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"

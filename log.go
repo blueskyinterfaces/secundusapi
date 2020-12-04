@@ -1,4 +1,4 @@
-package secundus
+package secundusapi
 
 import "github.com/labstack/echo"
 

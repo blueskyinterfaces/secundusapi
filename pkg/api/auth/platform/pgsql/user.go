@@ -3,15 +3,15 @@ package pgsql
 import (
 	"github.com/go-pg/pg/v9/orm"
 
-	"github.com/secundusteam/secundus"
+	"github.com/blueskyinterfaces/secundusapi"
 )
 
 // User represents the client for user table
 type User struct{}
 
 // View returns single user by ID
-func (u User) View(db orm.DB, id int) (secundus.User, error) {
-	var user secundus.User
+func (u User) View(db orm.DB, id int) (secundusapi.User, error) {
+	var user secundusapi.User
 	sql := `SELECT "user".*, "role"."id" AS "role__id", "role"."access_level" AS "role__access_level", "role"."name" AS "role__name" 
 	FROM "users" AS "user" LEFT JOIN "roles" AS "role" ON "role"."id" = "user"."role_id" 
 	WHERE ("user"."id" = ? and deleted_at is null)`
@@ -20,8 +20,8 @@ func (u User) View(db orm.DB, id int) (secundus.User, error) {
 }
 
 // FindByUsername queries for single user by username
-func (u User) FindByUsername(db orm.DB, uname string) (secundus.User, error) {
-	var user secundus.User
+func (u User) FindByUsername(db orm.DB, uname string) (secundusapi.User, error) {
+	var user secundusapi.User
 	sql := `SELECT "user".*, "role"."id" AS "role__id", "role"."access_level" AS "role__access_level", "role"."name" AS "role__name" 
 	FROM "users" AS "user" LEFT JOIN "roles" AS "role" ON "role"."id" = "user"."role_id" 
 	WHERE ("user"."username" = ? and deleted_at is null)`
@@ -30,8 +30,8 @@ func (u User) FindByUsername(db orm.DB, uname string) (secundus.User, error) {
 }
 
 // FindByToken queries for single user by token
-func (u User) FindByToken(db orm.DB, token string) (secundus.User, error) {
-	var user secundus.User
+func (u User) FindByToken(db orm.DB, token string) (secundusapi.User, error) {
+	var user secundusapi.User
 	sql := `SELECT "user".*, "role"."id" AS "role__id", "role"."access_level" AS "role__access_level", "role"."name" AS "role__name" 
 	FROM "users" AS "user" LEFT JOIN "roles" AS "role" ON "role"."id" = "user"."role_id" 
 	WHERE ("user"."token" = ? and deleted_at is null)`
@@ -40,6 +40,6 @@ func (u User) FindByToken(db orm.DB, token string) (secundus.User, error) {
 }
 
 // Update updates user's info
-func (u User) Update(db orm.DB, user secundus.User) error {
+func (u User) Update(db orm.DB, user secundusapi.User) error {
 	return db.Update(&user)
 }

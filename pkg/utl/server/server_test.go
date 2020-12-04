@@ -3,7 +3,7 @@ package server_test
 import (
 	"testing"
 
-	"github.com/secundusteam/secundus/pkg/utl/server"
+	"github.com/blueskyinterfaces/secundusapi/pkg/utl/server"
 )
 
 // Improve tests

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/secundusteam/secundus"
-	"github.com/secundusteam/secundus/pkg/api/user"
+	"github.com/blueskyinterfaces/secundusapi"
+	"github.com/blueskyinterfaces/secundusapi/pkg/api/user"
 
 	"github.com/labstack/echo"
 )
@@ -150,9 +150,9 @@ type createReq struct {
 	PasswordConfirm string `json:"password_confirm" validate:"required"`
 	Email           string `json:"email" validate:"required,email"`
 
-	CompanyID  int                 `json:"company_id" validate:"required"`
-	LocationID int                 `json:"location_id" validate:"required"`
-	RoleID     secundus.AccessRole `json:"role_id" validate:"required"`
+	CompanyID  int                    `json:"company_id" validate:"required"`
+	LocationID int                    `json:"location_id" validate:"required"`
+	RoleID     secundusapi.AccessRole `json:"role_id" validate:"required"`
 }
 
 func (h HTTP) create(c echo.Context) error {
@@ -167,11 +167,11 @@ func (h HTTP) create(c echo.Context) error {
 		return ErrPasswordsNotMaching
 	}
 
-	if r.RoleID < secundus.SuperAdminRole || r.RoleID > secundus.UserRole {
-		return secundus.ErrBadRequest
+	if r.RoleID < secundusapi.SuperAdminRole || r.RoleID > secundusapi.UserRole {
+		return secundusapi.ErrBadRequest
 	}
 
-	usr, err := h.svc.Create(c, secundus.User{
+	usr, err := h.svc.Create(c, secundusapi.User{
 		Username:   r.Username,
 		Password:   r.Password,
 		Email:      r.Email,
@@ -190,12 +190,12 @@ func (h HTTP) create(c echo.Context) error {
 }
 
 type listResponse struct {
-	Users []secundus.User `json:"users"`
-	Page  int             `json:"page"`
+	Users []secundusapi.User `json:"users"`
+	Page  int                `json:"page"`
 }
 
 func (h HTTP) list(c echo.Context) error {
-	var req secundus.PaginationReq
+	var req secundusapi.PaginationReq
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
@@ -212,7 +212,7 @@ func (h HTTP) list(c echo.Context) error {
 func (h HTTP) view(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return secundus.ErrBadRequest
+		return secundusapi.ErrBadRequest
 	}
 
 	result, err := h.svc.View(c, id)
@@ -237,7 +237,7 @@ type updateReq struct {
 func (h HTTP) update(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return secundus.ErrBadRequest
+		return secundusapi.ErrBadRequest
 	}
 
 	req := new(updateReq)
@@ -264,7 +264,7 @@ func (h HTTP) update(c echo.Context) error {
 func (h HTTP) delete(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return secundus.ErrBadRequest
+		return secundusapi.ErrBadRequest
 	}
 
 	if err := h.svc.Delete(c, id); err != nil {
